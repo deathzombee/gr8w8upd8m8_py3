@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import collections
-import subprocess
 import sys
 import time
 
@@ -140,7 +139,7 @@ class Wiiboard:
                         print("Ready for input, please stand on WiiBoard")
                         self.calibrationRequested = False
             elif intype == EXTENSION_8BYTES:
-                board_event = self.createBoardEvent(data[2:12])
+                board_event = self.create_board_event(data[2:12])
                 self.processor.mass(board_event)
             else:
                 print("ACK to data write received")
