@@ -2,7 +2,7 @@
 import collections
 import sys
 import time
-
+# using PyBluez-updated==0.31
 import bluetooth
 
 CONTINUOUS_REPORTING = "04"  # Easier as string with leading zero
