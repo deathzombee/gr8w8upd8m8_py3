@@ -57,7 +57,6 @@ class BoardEvent:
     def __init__(
             self, top_left, top_right, bottom_left, bottom_right, button_pressed, button_released
     ):
-
         self.topLeft = top_left
         self.topRight = top_right
         self.bottomLeft = bottom_left
@@ -162,7 +161,7 @@ class Wiiboard:
             pass
         print("WiiBoard disconnected")
 
-    # Try to discover a Wiiboard
+    # Try to discover a WiiBoard
     def discover(self):
         print("Press the red sync button on the board now")
         address = None
@@ -217,13 +216,13 @@ class Wiiboard:
             return val
         elif raw < self.calibration[1][pos]:
             val = 17 * (
-                (raw - self.calibration[0][pos])
-                / float((self.calibration[1][pos] - self.calibration[0][pos]))
+                    (raw - self.calibration[0][pos])
+                    / float((self.calibration[1][pos] - self.calibration[0][pos]))
             )
         elif raw > self.calibration[1][pos]:
             val = 17 + 17 * (
-                (raw - self.calibration[1][pos])
-                / float((self.calibration[2][pos] - self.calibration[1][pos]))
+                    (raw - self.calibration[1][pos])
+                    / float((self.calibration[2][pos] - self.calibration[1][pos]))
             )
 
         return val
@@ -234,23 +233,23 @@ class Wiiboard:
     def get_led(self):
         return self.LED
 
-    def calibration_parser(self, bytes):
+    def calibration_parser(self, calibration_bytes):
         index = 0
-        if len(bytes) == 16:
+        if len(calibration_bytes) == 16:
             for i in range(2):
                 for j in range(4):
                     self.calibration[i][j] = (
-                        int((bytes[index : index + 1]).hex(), 16) << 8
-                    ) + int((bytes[index + 1 : index + 2]).hex(), 16)
+                                                     int((calibration_bytes[index: index + 1]).hex(), 16) << 8
+                                             ) + int((calibration_bytes[index + 1: index + 2]).hex(), 16)
                     index += 2
-        elif len(bytes) < 16:
+        elif len(calibration_bytes) < 16:
             for i in range(4):
                 self.calibration[2][i] = (
-                    int(bytes[index : index + 1].hex(), 16) << 8
-                ) + int(bytes[index + 1 : index + 2].hex(), 16)
+                                                 int(calibration_bytes[index: index + 1].hex(), 16) << 8
+                                         ) + int(calibration_bytes[index + 1: index + 2].hex(), 16)
                 index += 2
 
-    # Send <data> to the Wiiboard
+    # Send <data> to the WiiBoard
     # <data> should be an array of strings, each string representing a single hex byte
     def send(self, data_hex):
         if self.status != "Connected":
@@ -274,7 +273,7 @@ class Wiiboard:
 
     def calibrate(self):
         message = (
-            "00" + str(COMMAND_READ_REGISTER) + "04" + "A4" + "00" + "24" + "00" + "18"
+                "00" + str(COMMAND_READ_REGISTER) + "04" + "A4" + "00" + "24" + "00" + "18"
         )
         print("Requesting calibration")
         self.send(message)
@@ -283,10 +282,10 @@ class Wiiboard:
     def set_report_type(self):
         # bytearr = ["00", COMMAND_REPORTING, CONTINUOUS_REPORTING, EXTENSION_8BYTES]
         bytearr = (
-            "00"
-            + str(COMMAND_REPORTING)
-            + str(CONTINUOUS_REPORTING)
-            + str(EXTENSION_8BYTES)
+                "00"
+                + str(COMMAND_REPORTING)
+                + str(CONTINUOUS_REPORTING)
+                + str(EXTENSION_8BYTES)
         )
         self.send(bytearr)
 
